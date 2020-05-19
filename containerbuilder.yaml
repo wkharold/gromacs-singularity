@@ -1,7 +1,7 @@
 steps:
-- name: gcr.io/wkh-gre-ytabb-y-gcp-slurm-bug/singularity-${_SINGULARITY_VERSION}
+- name: gcr.io/${PROJECT_ID}/singularity-${_SINGULARITY_VERSION}
   args: ['build', 'gromacs.sif', 'gromacs.def']
 artifacts:
   objects:
-    location: 'gs://wkh-gre-ytabb-y-gcp-slurm-bug-singularity'
+    location: 'gs://${SINGULARITY_REPO}'
     paths: ['gromacs.sif']
