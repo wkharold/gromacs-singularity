@@ -1,0 +1,25 @@
+Bootstrap: library
+From: centos:8
+
+%environment
+    export PATH="/usr/local/gromacs/bin:$PATH"
+
+%post
+    export GROMACS_VER="gromacs-2020.2"
+    export SIMD="AVX2_256"
+
+    yum install -y epel-release
+    yum group install -y "Development Tools"
+
+    yum install -y tar gzip wget cmake  curl net-tools numactl libmlx4 librdmacm libibverbs libibverbs-utils rdma libsysfs rdma-core-devel openmpi openmpi-devel fftw-devel
+
+    cd /opt
+
+    wget http://ftp.gromacs.org/pub/gromacs/${GROMACS_VER}.tar.gz
+    tar -xvzf ${GROMACS_VER}.tar.gz
+    cd ${GROMACS_VER}
+    mkdir build
+    cd build
+    cmake3 .. -DGMX_SIMD=${SIMD} -DGMX_MPI=on -DGMX_USE_RDTSCP=ON -DMPI_C_COMPILER=/usr/lib64/openmpi/bin/mpicc -DMPI_CXX_COMPILER=/usr/lib64/openmpi/bin/mpiCC
+    make
+    make install
